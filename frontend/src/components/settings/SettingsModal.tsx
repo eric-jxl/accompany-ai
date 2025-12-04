@@ -439,7 +439,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
                   <h5 className="font-medium text-gray-900 mb-2 dark:text-gray-100">用户 ID</h5>
                   <p className="text-sm text-gray-600 font-mono dark:text-gray-400 break-all">
-                    {userId.slice(0, 16)}...
+                    {userId.slice(0, 16)}
                   </p>
                 </div>
 
@@ -477,7 +477,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               {/* 开发者信息 */}
               <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  开发者：<a href="mailto:hexart@126.com" className="text-blue-600 hover:underline dark:text-blue-400">hexart</a>
+                  开发者：<a href="mailto:jxleric95@gmail.com" className="text-blue-600 hover:underline dark:text-blue-400">Eric</a>
                 </p>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
                   本应用不替代专业心理咨询服务

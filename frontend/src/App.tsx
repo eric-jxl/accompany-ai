@@ -7,8 +7,8 @@ import { Toaster } from './components/ui/Toaster';
 import { useApp } from './hooks/useApp';
 import { initializeTheme } from './hooks/useTheme';
 import { toast } from 'sonner';
-import type { ChatMode } from './types/chat';
-import type { ProviderType, ProviderConfig } from './types/provider';
+import type { ChatMode } from './types';
+import type { ProviderType, ProviderConfig } from './types';
 import { MODE_CONFIGS } from './constants/modes';
 
 initializeTheme();
@@ -167,9 +167,9 @@ export const App: React.FC = () => {
   }, [error]);
 
   return (
-    <div className="min-h-screen flex flex-col pt-24 md:pt-21">
-      {/* 头部 */}
-      <AppHeader
+      <div className="min-h-screen flex flex-col pt-20 md:pt-16">
+        {/* 头部 */}
+        <AppHeader
         selectedMode={selectedMode}
         onModeChange={handleModeChange}
         onSettingsClick={() => setIsSettingsOpen(true)}

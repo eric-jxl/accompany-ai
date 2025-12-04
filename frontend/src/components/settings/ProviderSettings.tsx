@@ -71,7 +71,7 @@ export const ProviderSettings: React.FC<ProviderSettingsProps> = ({
   useEffect(() => {
     const defaultModel = getDefaultModelForProvider(currentProvider);
     setHasDefaultModel(!!defaultModel);
-    
+
     // 如果有默认模型且当前没有选择模型，则自动选择默认模型
     if (defaultModel && !currentModel) {
       // 延迟执行以确保组件已完全加载
@@ -223,11 +223,11 @@ export const ProviderSettings: React.FC<ProviderSettingsProps> = ({
       }
       return true;
     }
-    
+
     // 对于其他 Provider，仍然需要检查 apiUrl
-    if (!currentConfig.apiUrl) return false;
-    
-    return true;
+    return currentConfig.apiUrl;
+
+
   };
 
   // 处理模型下拉菜单点击
@@ -236,7 +236,7 @@ export const ProviderSettings: React.FC<ProviderSettingsProps> = ({
     if (!hasDefaultModel) {
       setModelDropdownOpen(!modelDropdownOpen);
     }
-    
+
     // 如果下拉菜单关闭了，就不需要执行其他操作
     if (modelDropdownOpen) return;
 
@@ -253,7 +253,7 @@ export const ProviderSettings: React.FC<ProviderSettingsProps> = ({
 
     // 如果模型列表为空，尝试加载模型
     if (models.length === 0 && !isModelLoading) {
-      handleLoadModels();
+      await handleLoadModels();
     }
   };
 
@@ -584,7 +584,7 @@ export const ProviderSettings: React.FC<ProviderSettingsProps> = ({
                 </button>
               )}
             </div>
-            
+
             {!hasDefaultModel ? (
               // 如果没有默认模型，显示下拉菜单
               <div className="relative" data-dropdown>
@@ -671,11 +671,11 @@ export const ProviderSettings: React.FC<ProviderSettingsProps> = ({
                 </div>
               </div>
             )}
-            
+
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 flex items-start">
               <Sparkles className="w-3 h-3 mr-1 mt-0.5 flex-shrink-0" />
-              {hasDefaultModel 
-                ? '已配置默认模型，无需手动选择' 
+              {hasDefaultModel
+                ? '已配置默认模型，无需手动选择'
                 : '选择要使用的AI模型，不同模型有不同的能力和特点'}
             </p>
           </div>

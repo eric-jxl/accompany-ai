@@ -1,4 +1,4 @@
-import type { ChatMode } from '../types/chat';
+import type { ChatMode } from '../types';
 import { Sparkles, Star, Heart } from 'lucide-react';
 
 export const CHAT_MODES = {
