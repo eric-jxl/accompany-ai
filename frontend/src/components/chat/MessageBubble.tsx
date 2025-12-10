@@ -157,7 +157,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
 
                     {/* 消息内容 */}
                     {/*<div className="text-sm leading-relaxed whitespace-pre-wrap">*/}
-                    <div className="text-sm leading-snug wrap-break-word">
+                    <div className="text-sm ">
+
                         <MarkdownRenderer content={message.content} onError={(error) => console.error(error)}/>
                         {/*{message.content}*/}
                         {isStreaming && message.content === '' && (

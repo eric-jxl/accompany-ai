@@ -89,12 +89,15 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             className={`
             ${proseClassName} 
             ${className ?? ''} 
-              leading-tight
+              leading-snug max-w-none
               [&_p]:my-0.5
+              [&_h1]:my-1 [&_h2]:my-1 [&_h3]:my-1
+              [&_strong]:my-0
+              [&_li]:my-0.25
               [&_ul]:my-0.5
               [&_ol]:my-0.5
-              [&_pre]:my-1
               [&_blockquote]:my-0.5
+              [&_pre]:my-1
         `} dangerouslySetInnerHTML={sanitizedHtml}
             {...restProps}
         />
