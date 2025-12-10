@@ -89,11 +89,12 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
             className={`
             ${proseClassName} 
             ${className ?? ''} 
-            [&_p]:my-1 
-            [&_ul]:my-1 
-            [&_ol]:my-1 
-            [&_pre]:my-2 
-            [&_blockquote]:my-1
+              leading-tight
+              [&_p]:my-0.5
+              [&_ul]:my-0.5
+              [&_ol]:my-0.5
+              [&_pre]:my-1
+              [&_blockquote]:my-0.5
         `} dangerouslySetInnerHTML={sanitizedHtml}
             {...restProps}
         />
