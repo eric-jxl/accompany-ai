@@ -119,7 +119,7 @@ export const InputArea: React.FC<InputAreaProps> = ({
     const canSend = value.trim() && !disabled && !isOverLimit;
 
     return (
-        <div className="fixed inset-x-0  bottom-0 z-50 pb-[env(safe-area-inset-bottom)]">
+        <div className="fixed bottom-0 left-0 right-0 z-40 pb-[env(safe-area-inset-bottom)]">
             {/* 背景渐变效果 */}
             <div
                 className="absolute inset-0 bg-gradient-to-t from-white via-white/95 to-transparent dark:from-gray-900 dark:via-gray-900/95 pointer-events-none"/>

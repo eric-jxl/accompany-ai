@@ -126,7 +126,7 @@ const EmptyState: React.FC<{ selectedMode: ChatMode }> = ({selectedMode}) => {
     const colors = getColorScheme(selectedMode);
 
     return (
-        <div className="flex-1 flex items-center justify-center p-2">
+        <div className="flex-1 flex items-center justify-center p-6">
             <div className="text-center max-w-md">
                 {/* 图标 */}
                 {/*<div className="mb-6">*/}
@@ -140,11 +140,11 @@ const EmptyState: React.FC<{ selectedMode: ChatMode }> = ({selectedMode}) => {
                 {/*</div>*/}
 
                 {/* 标题和描述 */}
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 dark:text-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2 py-1 dark:text-gray-100">
                     {modeConfig.name}已就绪
                 </h3>
                 {/*<p className="text-gray-600 mb-6 dark:text-gray-400">*/}
-                {/*  {modeConfig.subtitle}*/}
+                {/*    {modeConfig.subtitle}*/}
                 {/*</p>*/}
 
                 {/* 示例建议 - 渐变卡片 */}
@@ -244,17 +244,18 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }, [streamingMessageId]);
 
     return (
-        <div className={`flex flex-col min-h-screen bg-gray-50 ${className} dark:bg-gray-900`}>
+        <div className={`flex flex-1 flex-col h-full bg-gray-50 ${className} dark:bg-gray-900`}>
             {/* 聊天消息区域 */}
             <div
                 ref={chatContainerRef}
                 className="flex-1 overflow-y-auto px-4 py-6 pb-[140px] pb-safe-area-inset-bottom"
                 style={{scrollBehavior: 'smooth'}}
             >
-              <div className="mx-auto max-w-[90%] sm:max-w-[80%] md:max-w-[70%]">
+                <div className="mx-auto max-w-[90%] sm:max-w-[80%] md:max-w-[70%]">
                     {/* 空状态 */}
                     {messages.length === 0 && (
                         <div className="flex flex-col items-center justify-center">
+                            {/* 如果Provider未配置，优先显示配置提示 */}
                             {!hasProvider ? (
                                 <NoProviderState onOpenSettings={onOpenSettings}/>
                             ) : (
