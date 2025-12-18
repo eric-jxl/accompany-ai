@@ -551,8 +551,8 @@ MIT License
 
 如有问题或建议，请通过以下方式联系：
 - **GitHub Issues**: https://github.com/hexart/praise-ai/issues
-- **项目主页**: https://github.com/hexart/praise-ai
-- **邮箱**: your-email@example.com
+- **项目主页**：
+- 
 - **文档**: 查看 [PROJECT_DOCUMENTATION.md](./docs/PROJECT_DOCUMENTATION.md) 获取详细文档
 
 ---
