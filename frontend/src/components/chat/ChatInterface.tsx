@@ -1,4 +1,5 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import {ChevronDown} from 'lucide-react';
 import {MessageBubble} from './MessageBubble';
 import type {ChatMessage, ChatMode} from '../../types';
 import {MODE_CONFIGS} from '../../constants/modes';
@@ -15,6 +16,9 @@ interface ChatInterfaceProps {
     // Provider状态
     hasProvider?: boolean;
     onOpenSettings?: () => void;
+
+    // 回调事件
+    onExampleClick?: (example: string) => void;
 
     // 调试模式
     debugMode?: boolean;
@@ -77,7 +81,7 @@ const NoProviderState: React.FC<{ onOpenSettings?: () => void }> = ({onOpenSetti
 /**
  * 空状态组件
  */
-const EmptyState: React.FC<{ selectedMode: ChatMode }> = ({selectedMode}) => {
+const EmptyState: React.FC<{ selectedMode: ChatMode; onExampleClick?: (example: string) => void }> = ({selectedMode, onExampleClick}) => {
     const modeConfig = MODE_CONFIGS[selectedMode];
     // const IconComponent = modeConfig.icon;
 
@@ -153,6 +157,7 @@ const EmptyState: React.FC<{ selectedMode: ChatMode }> = ({selectedMode}) => {
                     {modeConfig.examples.map((example, index) => (
                         <div
                             key={index}
+                            onClick={() => onExampleClick?.(example)}
                             className={`
                 relative overflow-hidden
                 text-sm font-medium ${colors.exampleText}
@@ -163,6 +168,7 @@ const EmptyState: React.FC<{ selectedMode: ChatMode }> = ({selectedMode}) => {
                 cursor-pointer
                 hover:shadow-md
                 group
+                transition-all duration-200
               `}
                         >
                             {/* 装饰性渐变光晕 */}
@@ -218,22 +224,32 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                                                                 streamingMessageId,
                                                                 hasProvider = true,
                                                                 onOpenSettings,
+                                                                onExampleClick,
                                                                 debugMode = false,
                                                                 debugInfo,
                                                                 className = ''
                                                             }) => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const [showScrollButton, setShowScrollButton] = useState(false);
 
     // 自动滚动到底部
-    const scrollToBottom = () => {
+    const scrollToBottom = useCallback(() => {
         messagesEndRef.current?.scrollIntoView({behavior: 'smooth'});
-    };
+    }, []);
+
+    const updateScrollButton = useCallback(() => {
+        const container = chatContainerRef.current;
+        if (!container) return;
+        const distanceToBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+        setShowScrollButton(distanceToBottom > 48);
+    }, []);
 
     // 当消息变化时滚动到底部
     useEffect(() => {
         scrollToBottom();
-    }, [messages, streamingMessageId]);
+        updateScrollButton();
+    }, [messages, streamingMessageId, scrollToBottom, updateScrollButton]);
 
     // 当开始流式传输时也滚动到底部
     useEffect(() => {
@@ -241,14 +257,23 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             const timer = setTimeout(scrollToBottom, 100);
             return () => clearTimeout(timer);
         }
-    }, [streamingMessageId]);
+    }, [streamingMessageId, scrollToBottom]);
+
+    useEffect(() => {
+        const container = chatContainerRef.current;
+        if (!container) return;
+        updateScrollButton();
+        const handleScroll = () => updateScrollButton();
+        container.addEventListener('scroll', handleScroll, {passive: true});
+        return () => container.removeEventListener('scroll', handleScroll);
+    }, [updateScrollButton]);
 
     return (
-        <div className={`flex flex-1 flex-col h-full bg-gray-50 ${className} dark:bg-gray-900`}>
+        <div className={`relative flex flex-1 flex-col h-full bg-gray-50 ${className} dark:bg-gray-900`}>
             {/* 聊天消息区域 */}
             <div
                 ref={chatContainerRef}
-                className="flex-1 overflow-y-auto px-4 py-6 pb-[140px] pb-safe-area-inset-bottom"
+                className="flex-1 overflow-y-auto px-4 py-6"
                 style={{scrollBehavior: 'smooth'}}
             >
                 <div className="mx-auto max-w-[90%] sm:max-w-[80%] md:max-w-[70%]">
@@ -259,7 +284,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                             {!hasProvider ? (
                                 <NoProviderState onOpenSettings={onOpenSettings}/>
                             ) : (
-                                <EmptyState selectedMode={selectedMode}/>
+                                <EmptyState selectedMode={selectedMode} onExampleClick={onExampleClick}/>
                             )}
                         </div>
                     )}
@@ -289,6 +314,24 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                     <div ref={messagesEndRef}/>
                 </div>
             </div>
+
+            {/* 滚动到底部按钮 */}
+            <button
+                type="button"
+                onClick={scrollToBottom}
+                aria-label="滚动到底部"
+                className={`
+          absolute right-4 bottom-4 z-20
+          flex items-center justify-center w-10 h-10 rounded-full
+          bg-white/90 dark:bg-gray-800/90 backdrop-blur
+          border border-gray-200 dark:border-gray-700
+          text-gray-600 dark:text-gray-300 shadow-md
+          transition-all duration-200
+          ${showScrollButton ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-2'}
+        `}
+            >
+                <ChevronDown className="w-5 h-5" />
+            </button>
         </div>
     );
 };

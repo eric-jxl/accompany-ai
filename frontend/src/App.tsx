@@ -77,6 +77,7 @@ export const App: React.FC = () => {
   // 处理模式切换
   const handleModeChange = useCallback((mode: ChatMode) => {
     setSelectedMode(mode);
+    setCurrentMessage('');
 
     toast.info(`已切换到${MODE_CONFIGS[mode].name}`, {
       description: `${MODE_CONFIGS[mode].description}`
@@ -167,7 +168,7 @@ export const App: React.FC = () => {
   }, [error]);
 
   return (
-      <div className="min-h-screen flex flex-col pt-20 md:pt-16">
+      <div className="h-screen flex flex-col">
         {/* 头部 */}
         <AppHeader
         selectedMode={selectedMode}
@@ -188,8 +189,8 @@ export const App: React.FC = () => {
         disabled={chat.isLoading || !provider.provider}
       />
 
-      {/* 主内容区 */}
-      <main className="flex-1 flex flex-col overflow-hidden">
+      {/* 主内容区 - 使用flex布局确保输入框始终可见，添加margin-top给fixed的header让出空间 */}
+      <main className="flex-1 flex flex-col overflow-hidden mt-20 md:mt-16">
         <ChatInterface
           messages={chat.chatHistory}
           selectedMode={selectedMode}
@@ -199,8 +200,22 @@ export const App: React.FC = () => {
           debugInfo={chat.lastDebugInfo}
           hasProvider={!!provider.provider}
           onOpenSettings={() => setIsSettingsOpen(true)}
+          onExampleClick={(example) => setCurrentMessage(example)}
           className="flex-1"
         />
+
+        {/* 输入区域 - 与聊天界面一起在flex容器中 */}
+        <div className="shrink-0">
+          <InputArea
+            value={currentMessage}
+            onChange={setCurrentMessage}
+            onSend={handleSendMessage}
+            onKeyDown={handleKeyDown}
+            disabled={chat.isLoading || !provider.provider}
+            currentMode={selectedMode}
+            maxLength={2000}
+          />
+        </div>
       </main>
 
       {/* 设置模态框 */}
@@ -225,17 +240,6 @@ export const App: React.FC = () => {
         onImportData={handleImportData}
         onResetAll={handleResetAll}
         isModelLoading={provider.isModelLoading}
-      />
-
-      {/* 固定输入区域 */}
-      <InputArea
-        value={currentMessage}
-        onChange={setCurrentMessage}
-        onSend={handleSendMessage}
-        onKeyDown={handleKeyDown}
-        disabled={chat.isLoading || !provider.provider}
-        currentMode={selectedMode}
-        maxLength={2000}
       />
 
       {/* 使用自定义 Toaster 组件 */}
