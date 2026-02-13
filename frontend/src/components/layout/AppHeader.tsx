@@ -156,7 +156,7 @@ export const AppHeader: React.FC<AppHeaderProps> = ({
     <header className="fixed top-0 md:top-0 left-0 right-0 z-50 px-4 md:px-6">
       <div className="max-w-5xl mx-auto">
         <div className={`
-          backdrop-blur-xl bg-white/70 dark:bg-gray-900/70 
+          backdrop-blur-xl bg-white/95 dark:bg-gray-900/95 
           border border-gray-200/50 dark:border-gray-700/50
           rounded-2xl shadow-lg
         `}>

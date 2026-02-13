@@ -52,7 +52,7 @@ const NoProviderState: React.FC<{ onOpenSettings?: () => void }> = ({onOpenSetti
                 <h3 className="text-lg font-semibold text-gray-900 mb-2 dark:text-gray-100">
                     需要配置 AI 服务
                 </h3>
-                <p className="text-gray-600 mb-6 dark:text-gray-400">
+                <p className="text-sm text-gray-600 mb-6 dark:text-gray-400">
                     请先配置 AI 服务提供商和模型，然后就可以开始聊天了。
                 </p>
 
@@ -130,8 +130,8 @@ const EmptyState: React.FC<{ selectedMode: ChatMode; onExampleClick?: (example: 
     const colors = getColorScheme(selectedMode);
 
     return (
-        <div className="flex-1 flex items-center justify-center p-6">
-            <div className="text-center max-w-md">
+        <div className="flex-1 flex items-center justify-center p-6 sm:p-8">
+            <div className="text-center max-w-lg">
                 {/* 图标 */}
                 {/*<div className="mb-6">*/}
                 {/*  <div className={`*/}
@@ -144,7 +144,7 @@ const EmptyState: React.FC<{ selectedMode: ChatMode; onExampleClick?: (example: 
                 {/*</div>*/}
 
                 {/* 标题和描述 */}
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 py-1 dark:text-gray-100">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3 dark:text-gray-100">
                     {modeConfig.name}已就绪
                 </h3>
                 {/*<p className="text-gray-600 mb-6 dark:text-gray-400">*/}
@@ -152,21 +152,21 @@ const EmptyState: React.FC<{ selectedMode: ChatMode; onExampleClick?: (example: 
                 {/*</p>*/}
 
                 {/* 示例建议 - 渐变卡片 */}
-                <div className="space-y-2 mb-6">
-                    <p className="text-sm text-gray-500 mb-3 dark:text-gray-400 font-medium">你可以试试：</p>
+                <div className="space-y-3 mb-8">
+                    <p className="text-sm text-gray-500 mb-4 dark:text-gray-400 font-medium">你可以试试：</p>
                     {modeConfig.examples.map((example, index) => (
                         <div
                             key={index}
                             onClick={() => onExampleClick?.(example)}
                             className={`
                 relative overflow-hidden
-                text-sm font-medium ${colors.exampleText}
+                text-[15px] font-medium ${colors.exampleText}
                 ${colors.exampleBg} 
-                px-4 py-3 rounded-xl 
+                px-5 py-3.5 rounded-xl 
                 border ${colors.exampleBorder}
                 ${colors.exampleHover}
                 cursor-pointer
-                hover:shadow-md
+                hover:shadow-lg
                 group
                 transition-all duration-200
               `}
@@ -202,8 +202,8 @@ const EmptyState: React.FC<{ selectedMode: ChatMode; onExampleClick?: (example: 
                     {/* 内容 */}
                     <div className="relative">
                         <div className="flex items-start space-x-2">
-                            <span className="text-xs mt-0.5">{modeConfig.emoji}</span>
-                            <p className={`text-xs ${colors.tipText} leading-relaxed text-left`}>
+                            <span className="text-sm mt-0.5">{modeConfig.emoji}</span>
+                            <p className={`text-sm ${colors.tipText} leading-relaxed text-left`}>
                                 <strong className="font-semibold">模式特点：</strong>
                                 {modeConfig.description}
                             </p>
@@ -270,13 +270,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
     return (
         <div className={`relative flex flex-1 flex-col h-full bg-gray-50 ${className} dark:bg-gray-900`}>
-            {/* 聊天消息区域 */}
+            {/* 聊天消息区域 - 优化padding，最大化显示内容 */}
             <div
                 ref={chatContainerRef}
-                className="flex-1 overflow-y-auto px-4 py-6"
+                className="flex-1 overflow-y-auto px-4 sm:px-6 pt-20 pb-40 md:pt-18 md:pb-36"
                 style={{scrollBehavior: 'smooth'}}
             >
-                <div className="mx-auto max-w-[90%] sm:max-w-[80%] md:max-w-[70%]">
+                <div className="mx-auto max-w-4xl">
                     {/* 空状态 */}
                     {messages.length === 0 && (
                         <div className="flex flex-col items-center justify-center">
@@ -291,7 +291,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
                     {/* 消息列表 */}
                     {messages.length > 0 && (
-                        <div className="space-y-5 sm:space-y-6 mx-5 sm:mx-15">
+                        <div className="space-y-6">
                             {messages.map((message, index) => (
                                 <MessageBubble
                                     key={message.id || index}
@@ -315,22 +315,23 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
                 </div>
             </div>
 
-            {/* 滚动到底部按钮 */}
+            {/* 滚动到底部按钮 - 调整bottom位置，避免被输入框遮挡 */}
             <button
                 type="button"
                 onClick={scrollToBottom}
                 aria-label="滚动到底部"
                 className={`
-          absolute right-4 bottom-4 z-20
-          flex items-center justify-center w-10 h-10 rounded-full
-          bg-white/90 dark:bg-gray-800/90 backdrop-blur
-          border border-gray-200 dark:border-gray-700
-          text-gray-600 dark:text-gray-300 shadow-md
+          absolute right-6 bottom-48 md:bottom-44 z-20
+          flex items-center justify-center w-12 h-12 rounded-full
+          bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl
+          border-2 border-gray-200 dark:border-gray-700
+          text-gray-600 dark:text-gray-300 shadow-xl
+          hover:shadow-2xl hover:scale-110
           transition-all duration-200
           ${showScrollButton ? 'opacity-100 translate-y-0' : 'pointer-events-none opacity-0 translate-y-2'}
         `}
             >
-                <ChevronDown className="w-5 h-5" />
+                <ChevronDown className="w-6 h-6" />
             </button>
         </div>
     );

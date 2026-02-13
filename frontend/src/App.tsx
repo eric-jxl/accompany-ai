@@ -189,8 +189,8 @@ export const App: React.FC = () => {
         disabled={chat.isLoading || !provider.provider}
       />
 
-      {/* 主内容区 - 使用flex布局确保输入框始终可见，添加margin-top给fixed的header让出空间 */}
-      <main className="flex-1 flex flex-col overflow-hidden mt-20 md:mt-16">
+      {/* 主内容区 - 添加margin-top给fixed的header让出空间，添加padding-bottom给fixed的输入框让出空间 */}
+      <main className="flex-1 flex flex-col overflow-hidden">
         <ChatInterface
           messages={chat.chatHistory}
           selectedMode={selectedMode}
@@ -203,20 +203,20 @@ export const App: React.FC = () => {
           onExampleClick={(example) => setCurrentMessage(example)}
           className="flex-1"
         />
-
-        {/* 输入区域 - 与聊天界面一起在flex容器中 */}
-        <div className="shrink-0">
-          <InputArea
-            value={currentMessage}
-            onChange={setCurrentMessage}
-            onSend={handleSendMessage}
-            onKeyDown={handleKeyDown}
-            disabled={chat.isLoading || !provider.provider}
-            currentMode={selectedMode}
-            maxLength={2000}
-          />
-        </div>
       </main>
+
+      {/* 输入区域 - 固定在底部 */}
+      <div className="fixed bottom-0 left-0 right-0 z-40">
+        <InputArea
+          value={currentMessage}
+          onChange={setCurrentMessage}
+          onSend={handleSendMessage}
+          onKeyDown={handleKeyDown}
+          disabled={chat.isLoading || !provider.provider}
+          currentMode={selectedMode}
+          maxLength={2000}
+        />
+      </div>
 
       {/* 设置模态框 */}
       <SettingsModal

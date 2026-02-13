@@ -122,7 +122,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
     }
     return (
         <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
-            <div className={`max-w-md lg:max-w-xl xl:max-w-2xl ${isUser ? 'order-2' : 'order-1'}`}>
+            <div className={`max-w-[85%] sm:max-w-md lg:max-w-xl xl:max-w-2xl ${isUser ? 'order-2' : 'order-1'}`}>
                 {/* 模式和情感分析指示器 (AI消息) */}
                 {!isUser && message.mode && debugMode && (
                     <div className="mb-2 flex items-center space-x-2">
@@ -140,48 +140,52 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
                     </div>
                 )}
 
-                {/* 消息气泡 */}
-                <div
-                    className={`relative px-4 py-3 rounded-2xl shadow-sm ${isUser ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' : 'bg-white text-gray-800 border border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700'}`}>
+                {/* 消息气泡容器 - 增加顶部间距容纳头像 */}
+                <div className="relative mt-6">
                     {/* 头像指示器 */}
                     <div
-                        className={`absolute -top-4 ${isUser ? '-right-4' : '-left-4'} w-8 h-8 rounded-full flex items-center justify-center shadow-sm ${isUser ? 'bg-sky-500' : 'bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700'
+                        className={`absolute -top-5 ${isUser ? '-right-1' : '-left-1'} w-10 h-10 rounded-full flex items-center justify-center shadow-lg z-10 ${isUser ? 'bg-gradient-to-br from-sky-400 to-blue-500' : 'bg-white border-2 border-gray-200 dark:bg-gray-800 dark:border-gray-600'
                         }`}>
                         {isUser ? (
-                            <User className="w-4 h-4 text-white"/>
+                            <User className="w-5 h-5 text-white"/>
                         ) : (
                             <Bot
-                                className={`w-4 h-4 ${isStreaming ? 'text-blue-500' : 'text-gray-600 dark:text-gray-400'}`}/>
+                                className={`w-5 h-5 ${isStreaming ? 'text-blue-500 animate-pulse' : 'text-gray-600 dark:text-gray-400'}`}/>
                         )}
                     </div>
 
-                    {/* 消息内容 */}
-                    {/*<div className="text-sm leading-relaxed whitespace-pre-wrap">*/}
-                    <div className="text-sm ">
-
-                        <MarkdownRenderer content={message.content} onError={(error) => console.error(error)}/>
-                        {/*{message.content}*/}
-                        {isStreaming && message.content === '' && (
-                            <div className="flex items-center space-x-2">
-                                <span className="text-gray-500 dark:text-gray-400">AI正在思考</span>
-                                <TypingIndicator/>
-                            </div>
-                        )}
-                        {isStreaming && message.content !== '' && (
-                            <span className="inline-block w-2 h-4 bg-current animate-pulse ml-1"/>
-                        )}
-                    </div>
-
-                    {/* 时间戳 */}
+                    {/* 消息气泡 */}
                     <div
-                        className={`text-xs mt-2 ${isUser ? 'text-blue-100 text-right' : 'text-gray-500 dark:text-gray-400'}`}>
-                        {formatTimestamp(message.timestamp, 'absolute')}
-                        {isStreaming && (
-                            <span className="ml-2 inline-flex items-center">
-                <div className="w-2 h-2 bg-current rounded-full animate-pulse"/>
-                <span className="ml-1">实时回复中</span>
-              </span>
-                        )}
+                        className={`px-4 py-3 rounded-2xl shadow-sm break-words overflow-hidden ${isUser ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' : 'bg-white text-gray-800 border border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700'}`}>
+
+                        {/* 消息内容 */}
+                        {/*<div className="text-sm leading-relaxed whitespace-pre-wrap">*/}
+                        <div className="text-[15px] leading-relaxed break-words overflow-wrap-anywhere min-w-0">
+
+                            <MarkdownRenderer content={message.content} onError={(error) => console.error(error)}/>
+                            {/*{message.content}*/}
+                            {isStreaming && message.content === '' && (
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-gray-500 dark:text-gray-400">AI正在思考</span>
+                                    <TypingIndicator/>
+                                </div>
+                            )}
+                            {isStreaming && message.content !== '' && (
+                                <span className="inline-block w-2 h-4 bg-current animate-pulse ml-1"/>
+                            )}
+                        </div>
+
+                        {/* 时间戳 */}
+                        <div
+                            className={`text-xs mt-2 ${isUser ? 'text-blue-100 text-right' : 'text-gray-500 dark:text-gray-400'}`}>
+                            {formatTimestamp(message.timestamp, 'absolute')}
+                            {isStreaming && (
+                                <span className="ml-2 inline-flex items-center">
+                    <div className="w-2 h-2 bg-current rounded-full animate-pulse"/>
+                    <span className="ml-1">实时回复中</span>
+                  </span>
+                            )}
+                        </div>
                     </div>
                 </div>
 

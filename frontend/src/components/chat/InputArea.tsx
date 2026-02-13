@@ -35,7 +35,7 @@ export const InputArea: React.FC<InputAreaProps> = ({
         if (textarea) {
             textarea.style.height = 'auto';
             const scrollHeight = textarea.scrollHeight;
-            const maxHeight = 200; // 增加最大高度
+            const maxHeight = 180; // 恢复合理的最大高度
             textarea.style.height = Math.min(scrollHeight, maxHeight) + 'px';
         }
     }, [value]);
@@ -119,12 +119,12 @@ export const InputArea: React.FC<InputAreaProps> = ({
     const canSend = value.trim() && !disabled && !isOverLimit;
 
     return (
-        <div className="relative border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 pb-[env(safe-area-inset-bottom)]">
+        <div className="relative border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-lg pb-[env(safe-area-inset-bottom)]">
             {/* 背景渐变效果 */}
             <div
-                className="absolute inset-0 bg-gradient-to-t from-white via-white/95 to-transparent dark:from-gray-900 dark:via-gray-900/95 pointer-events-none"/>
+                className="absolute inset-0 bg-gradient-to-t from-white via-white/98 to-white/90 dark:from-gray-900 dark:via-gray-900/98 dark:to-gray-900/90 pointer-events-none"/>
 
-            <div className="relative max-w-4xl mx-auto px-4 pb-2 pt-2 z-10">
+            <div className="relative max-w-4xl mx-auto px-4 pb-2 pt-2 z-10\">
                 {/* 主输入容器 */}
                 <div className={`
           relative group transition-all duration-300
@@ -152,14 +152,14 @@ export const InputArea: React.FC<InputAreaProps> = ({
                             <div className="flex items-center space-x-1">
                                 {/* 模式指示器 - 使用 MODE_CONFIGS 中的图标 */}
                                 <div className={`
-                  flex items-center space-x-2 px-3 py-1 rounded-full
+                  flex items-center space-x-1.5 px-3 py-1 rounded-full
                   bg-gradient-to-r ${modeConfig.gradient}
                   text-${modeConfig.accentColor}-600 dark:text-${modeConfig.accentColor}-400
                   text-sm font-medium
                 `}>
                                     {(() => {
                                         const IconComponent = MODE_CONFIGS[currentMode].icon;
-                                        return <IconComponent className="w-3.5 h-3.5"/>;
+                                        return <IconComponent className="w-4 h-4"/>;
                                     })()}
                                     <span>{MODE_CONFIGS[currentMode]?.name || '智能模式'}</span>
                                 </div>
@@ -234,7 +234,7 @@ export const InputArea: React.FC<InputAreaProps> = ({
                     className={`
                     w-full px-2 py-3 bg-transparent resize-none
                     focus:outline-none text-gray-900 placeholder-gray-400
-                    min-h-[48px] max-h-[200px] leading-6
+                    min-h-[44px] max-h-[180px] leading-6
                     text-base scrollbar-thin scrollbar-thumb-gray-300 
                     dark:scrollbar-thumb-gray-600
                     ${disabled ? 'cursor-not-allowed opacity-50' : ''}
