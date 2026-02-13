@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, lazy, Suspense } from 'react';
 import { AppHeader } from './components/layout/AppHeader';
 import { ChatInterface } from './components/chat/ChatInterface';
 import { InputArea } from './components/chat/InputArea';
-import { SettingsModal } from './components/settings/SettingsModal';
+// 懒加载 SettingsModal，减少初始加载体积
+const SettingsModal = lazy(() => import('./components/settings/SettingsModal').then(module => ({ default: module.SettingsModal })));
 import { Toaster } from './components/ui/Toaster';
 import { useApp } from './hooks/useApp';
 import { initializeTheme } from './hooks/useTheme';
@@ -218,29 +219,31 @@ export const App: React.FC = () => {
         />
       </div>
 
-      {/* 设置模态框 */}
-      <SettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        providers={provider.supportedProviders}
-        currentProvider={provider.providerType}
-        currentConfig={provider.config}
-        onProviderChange={handleProviderChange}
-        onConfigUpdate={provider.updateConfig}
-        onTestConnection={handleTestConnection}
-        models={provider.models}
-        currentModel={provider.currentModel}
-        onModelSwitch={provider.switchModel}
-        onLoadModels={provider.loadModels}
-        onSetConnectionStatus={provider.setConnectionStatus}
-        settings={settings}
-        onSettingsUpdate={updateSettings}
-        userId={userId}
-        onExportData={exportData}
-        onImportData={handleImportData}
-        onResetAll={handleResetAll}
-        isModelLoading={provider.isModelLoading}
-      />
+      {/* 设置模态框 - 懒加载 */}
+      <Suspense fallback={null}>
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+          providers={provider.supportedProviders}
+          currentProvider={provider.providerType}
+          currentConfig={provider.config}
+          onProviderChange={handleProviderChange}
+          onConfigUpdate={provider.updateConfig}
+          onTestConnection={handleTestConnection}
+          models={provider.models}
+          currentModel={provider.currentModel}
+          onModelSwitch={provider.switchModel}
+          onLoadModels={provider.loadModels}
+          onSetConnectionStatus={provider.setConnectionStatus}
+          settings={settings}
+          onSettingsUpdate={updateSettings}
+          userId={userId}
+          onExportData={exportData}
+          onImportData={handleImportData}
+          onResetAll={handleResetAll}
+          isModelLoading={provider.isModelLoading}
+        />
+      </Suspense>
 
       {/* 使用自定义 Toaster 组件 */}
       <Toaster />
